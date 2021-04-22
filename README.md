@@ -1,6 +1,6 @@
         # chat_app
 
-![](images/chat1.PNG) ![](images/chat2.PNG)
+![](images/chat1.PNG) ![](images/chat2.PNG) ![](images/chat3.PNG)
 
 ## Getting Started
 

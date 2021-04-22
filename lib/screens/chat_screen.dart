@@ -15,13 +15,21 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  @override
+ @override
   void initState() {
     // TODO: implement initState
-    final fbm = FirebaseMessaging();
-    fbm.requestNotificationPermissions(); // we need this just on IOS
-    fbm.configure();
     super.initState();
+    // final fbm = FirebaseMessaging.instance;
+    // fbm.requestPermission();
+    // FirebaseMessaging.onMessage.listen((message) {
+    //   print(message);
+    //   return;
+    // });
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   print(message);
+    //   return;
+    // });
+    // fbm.subscribeToTopic('chat');
   }
   @override
   Widget build(BuildContext context) {

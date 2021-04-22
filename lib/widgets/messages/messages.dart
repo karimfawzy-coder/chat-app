@@ -7,40 +7,31 @@ import 'package:flutter/material.dart';
 class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: FirebaseAuth.instance.currentUser(),
-      builder: (ctx, futureSnapShot) {
-        if (futureSnapShot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
+    final user = FirebaseAuth.instance.currentUser;
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('chat')
+            .orderBy('createdAt', descending: true)
+            .snapshots(),
+        builder: (ctx, chatSnapShot) {
+          if (chatSnapShot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final userId = user.uid;
+          final chatMessages = chatSnapShot.data.docs;
+          return ListView.builder(
+            reverse: true,
+            itemCount: chatMessages.length,
+            itemBuilder: (ctx, index) => MessageBubble(
+              message: chatMessages[index].data()['text'],
+              isMe: chatMessages[index].data()['userId'] == userId,
+              key: ValueKey(chatMessages[index].id),
+              username: chatMessages[index].data()['username'],
+              userImage: chatMessages[index].data()['user_image'],
+            ),
           );
-        }
-        return StreamBuilder(
-            stream: Firestore.instance
-                .collection('chat')
-                .orderBy('createdAt', descending: true)
-                .snapshots(),
-            builder: (ctx, chatSnapShot) {
-              if (chatSnapShot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final userId = futureSnapShot.data.uid;
-              final chatMessages = chatSnapShot.data.documents;
-              return ListView.builder(
-                reverse: true,
-                itemCount: chatMessages.length,
-                itemBuilder: (ctx, index) => MessageBubble(
-                  message: chatMessages[index]['text'],
-                  isMe: chatMessages[index]['userId'] == userId,
-                  key: ValueKey(chatMessages[index].documentID),
-                  username: chatMessages[index]['username'],
-                  userImage:chatMessages[index]['user_image'],
-                ),
-              );
-            });
-      },
-    );
+        });
   }
 }

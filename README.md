@@ -1,6 +1,6 @@
         # chat_app
 
-A new Flutter application.
+![](images/chat1.PNG) ![](images/chat2.PNG)
 
 ## Getting Started
 
